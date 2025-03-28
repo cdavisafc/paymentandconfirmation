@@ -30,7 +30,7 @@ public class MyWorkflowImpl implements MyWorkflow {
 
     public OrderProcessingOutput processOrder(OrderProcessingInput orderProcessingInput) {
 
-        logger.info("going to greet " + orderProcessingInput.getName() + " appropriately");
+        logger.info("processing order #" + orderProcessingInput.getOrderNumber());
 
         // Process payment
         String confirmationNumber = activityStub.processPayment(orderProcessingInput);

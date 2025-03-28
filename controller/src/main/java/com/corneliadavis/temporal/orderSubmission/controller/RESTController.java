@@ -49,13 +49,21 @@ public class RESTController {
         MyWorkflow workflow = client.newWorkflowStub(MyWorkflow.class, options);
 
 
-        logger.info("invoking workflow to greet " + payload.getName());
-        OrderProcessingOutput orderResult = workflow.processOrder(new OrderProcessingInput(payload.getName(),
-                                                                         payload.getAddress(),
-                                                                         payload.getCardNumber(),
-                                                                         payload.getExpiry(),
-                                                                         payload.getCardNumber(),
-                                                                         orderNumber));
+        logger.info("submitting order #" + orderNumber + " for processing");
+        // Call the Workflow method. This is a blocking call.
+        // The Workflow method will return when the Workflow completes.
+        OrderProcessingInput orderInput = new OrderProcessingInput(payload.getName(),
+                payload.getAddress(),
+                payload.getEmail(),
+                payload.getCardNumber(),
+                payload.getExpiry(),
+                payload.getCvv(),
+                orderNumber);
+        // iterate over the order items and add them to the order input
+        for (OrderPayload.OrderItem item : payload.getOrderItems()) {
+            orderInput.addOrderItem(item.getName(), item.getQuantity(), item.getPrice());
+        }
+       OrderProcessingOutput orderResult = workflow.processOrder(orderInput);
 
         return orderResult.getOrderStatus();
 
