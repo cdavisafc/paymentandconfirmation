@@ -3,6 +3,8 @@ package com.corneliadavis.temporal.orderSubmission.shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class OrderProcessingInput implements Serializable {
 
     public static class OrderItem {
@@ -52,7 +54,6 @@ public class OrderProcessingInput implements Serializable {
     private String email;
     private String cardNumber;
     private String expiry;
-    private String cvv;
     private Long orderNumber;
     private ArrayList<OrderItem> orderItems; 
 
@@ -62,13 +63,12 @@ public class OrderProcessingInput implements Serializable {
 
     // constructor talking all arguments
     public OrderProcessingInput(String name, String address, String email, String cardNumber, String expiry, 
-                                String cvv, Long orderNumber) {
+                                Long orderNumber) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.cardNumber = cardNumber;
         this.expiry = expiry;
-        this.cvv = cvv;
         this.orderNumber = orderNumber;
         this.orderItems = new ArrayList<>();
     }
@@ -114,14 +114,6 @@ public class OrderProcessingInput implements Serializable {
         this.expiry = expiry;
     }
 
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
-
     public Long getOrderNumber() {
         return orderNumber;
     }   
@@ -136,6 +128,16 @@ public class OrderProcessingInput implements Serializable {
 
     public void addOrderItem(String itemName, int quantity, double price) {
         this.orderItems.add(new OrderItem(itemName, quantity, price));
+    }
+
+    // get total price of all order items
+    @JsonIgnore
+    public double getTotalPrice() {
+        double total = 0;
+        for (OrderItem item : orderItems) {
+            total += item.getPrice() * item.getQuantity();
+        }
+        return total;
     }
 
 }

@@ -43,7 +43,6 @@ public class OrderPayload {
     private String email;
     private String cardNumber;
     private String expiry;
-    private String cvv;
     private OrderItem[] orderItems;
 
     // Getters and setters
@@ -85,14 +84,6 @@ public class OrderPayload {
 
     public void setExpiry(String expiry) {
         this.expiry = expiry;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
     }
 
     public OrderItem[] getOrderItems() {

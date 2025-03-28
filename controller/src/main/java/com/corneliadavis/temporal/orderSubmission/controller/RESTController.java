@@ -57,7 +57,6 @@ public class RESTController {
                 payload.getEmail(),
                 payload.getCardNumber(),
                 payload.getExpiry(),
-                payload.getCvv(),
                 orderNumber);
         // iterate over the order items and add them to the order input
         for (OrderPayload.OrderItem item : payload.getOrderItems()) {
