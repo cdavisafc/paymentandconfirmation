@@ -50,4 +50,27 @@ public class MyActivitiesImpl implements MyActivities {
 
     }
 
+    @Override
+    public void recordPayment(RecordPaymentInput recordPaymentInput) {
+        logger.info("Recording payment for order " + recordPaymentInput.getOrderNumber());
+        logger.info("Payment confirmation number = " + recordPaymentInput.getPaymentConfirmationNumber());
+        logger.info("Payment amount = " + recordPaymentInput.getAmount());
+        
+        return;
+    }
+
+    @Override
+    public void sendEmail(SendEmailInput sendEmailInput) {
+        logger.info("Sending email for order " + sendEmailInput.getOrder().getOrderNumber() );
+        logger.info("email body = " + sendEmailInput.getEmailMesage());
+
+    }
+
+    @Override
+    public ProcessOrderOutput processOrder(OrderProcessingInput orderProcessingInput) {
+        logger.info("Processing order " + orderProcessingInput.getOrderNumber());
+        // Logic to process order
+        return new ProcessOrderOutput(java.util.UUID.randomUUID().toString());
+    }
+
 }

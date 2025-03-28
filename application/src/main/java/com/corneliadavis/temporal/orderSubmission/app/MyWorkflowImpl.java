@@ -1,6 +1,7 @@
 package com.corneliadavis.temporal.orderSubmission.app;
 
 import java.time.Duration;
+import java.util.concurrent.Flow.Processor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +31,26 @@ public class MyWorkflowImpl implements MyWorkflow {
         String confirmationNumber = activityStub.processPayment(orderProcessingInput);
 
         // record payment confirmation number
-        logger.info("Payment processed for order " + orderProcessingInput.getOrderNumber() + " with confirmation number "
-                + confirmationNumber);
+        activityStub.recordPayment(new RecordPaymentInput(
+                orderProcessingInput.getOrderNumber(),
+                confirmationNumber,
+                orderProcessingInput.getTotalPrice()));
 
         // send order placed email
+        String emailMessage = "Order #" + orderProcessingInput.getOrderNumber() + " has been placed. ";
+        activityStub.sendEmail(new SendEmailInput(orderProcessingInput, emailMessage));
 
         // process order
-        String trackingNumber = "1234";
+        ProcessOrderOutput processOrderOutput = activityStub.processOrder(orderProcessingInput);
 
         // send order shipped email
+        String emailMessage2 = "Order #" + orderProcessingInput.getOrderNumber() + " has been shipped. "
+                + "Tracking number: " + processOrderOutput.getTrackingNumber();
+        activityStub.sendEmail(new SendEmailInput(orderProcessingInput, emailMessage2));
 
-        return new OrderProcessingOutput("ORDER SHIPPED", orderProcessingInput.getOrderNumber(), "tracking number " + trackingNumber);
+        return new OrderProcessingOutput("ORDER SHIPPED", 
+                          orderProcessingInput.getOrderNumber(), 
+                          "tracking number " + processOrderOutput.getTrackingNumber());
     }
 
 }

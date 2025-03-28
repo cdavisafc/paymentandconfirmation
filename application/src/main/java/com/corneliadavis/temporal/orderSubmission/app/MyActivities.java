@@ -11,4 +11,13 @@ public interface MyActivities {
     @ActivityMethod
     String processPayment(OrderProcessingInput orderProcessingInput);
 
+    @ActivityMethod
+    void recordPayment(RecordPaymentInput recordPaymentInput);
+
+    @ActivityMethod
+    void sendEmail(SendEmailInput sendEmailInput);
+
+    @ActivityMethod
+    ProcessOrderOutput processOrder(OrderProcessingInput orderProcessingInput);
+
 }
